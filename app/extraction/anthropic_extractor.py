@@ -61,6 +61,7 @@ class AnthropicExtractor(VisionExtractor):
             response = await self._client.messages.create(
                 model=self.model,
                 max_tokens=1024,
+                temperature=0,
                 system=SYSTEM_PROMPT,
                 tools=[EXTRACTION_TOOL],
                 tool_choice={"type": "tool", "name": "record_label_fields"},
