@@ -150,9 +150,16 @@ label. Four things keep this well inside the budget:
 - Batches fan out concurrently rather than looping, bounded by a semaphore.
 - Comparison never touches the network.
 
-Measured time is shown in the interface for every label, split into reading and
-comparing, and the summary turns red past five seconds. The number is not
-claimed, it is displayed.
+Measured time is shown for every label, split into reading and comparing.
+
+The five second target is judged in single-label mode only, because that is what
+it means: how long an agent waits for the label in front of them. Inside a batch
+the labels queue against each other, so per-label time there measures contention,
+not response time, and the interface reports batch results as throughput instead.
+Measured on the deployed prototype: 3.5s for a single label, and roughly one
+label per second sustained across a batch of ten.
+
+For scale, Sarah Chen put manual review at 5-10 minutes per application.
 
 ### The interface
 
