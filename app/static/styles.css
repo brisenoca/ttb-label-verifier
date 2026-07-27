@@ -1,0 +1,280 @@
+/* Label Verification — visual system
+ *
+ * Two constraints shaped every choice here:
+ *
+ * 1. Sarah Chen's benchmark is a 73-year-old first-time user and half her team
+ *    is over 50. So: 17px base body text, 48px minimum control height, one
+ *    column, one path through the page, and no interaction that depends on
+ *    hover or on noticing something small.
+ * 2. Marcus Williams said the network blocks outbound domains. So there are no
+ *    webfonts, no icon library and no CDN of any kind. Everything renders from
+ *    fonts already on the machine.
+ *
+ * Verdicts are never carried by color alone — each one pairs a color with a
+ * glyph and a word, which is both a Section 508 requirement and the only way
+ * the red/green distinction survives a printed page or a colorblind reader.
+ */
+
+:root {
+  --ink: #16191f;
+  --ink-soft: #4d5765;
+  --rule: #d3dae3;
+  --page: #eef1f5;
+  --surface: #ffffff;
+  --navy: #1b4d8f;
+  --navy-deep: #123566;
+
+  --pass: #0f7a4d;
+  --pass-bg: #e8f5ee;
+  --review: #92590a;
+  --review-bg: #fdf3e2;
+  --fail: #b3261e;
+  --fail-bg: #fdeceb;
+
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --radius: 6px;
+  --gap: 1.25rem;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap { max-width: 60rem; margin: 0 auto; padding: 0 1.25rem; }
+
+/* --- Masthead ----------------------------------------------------------- */
+
+.masthead {
+  background: var(--navy-deep);
+  color: #fff;
+  padding: 2.25rem 0 2rem;
+  border-bottom: 5px solid #c8102e;
+}
+.eyebrow {
+  margin: 0 0 .4rem;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #a8c4e8;
+}
+.masthead h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -.015em;
+}
+.lede { margin: .65rem 0 0; max-width: 42rem; color: #dce7f5; font-size: 1.05rem; }
+
+/* --- Steps -------------------------------------------------------------- */
+
+.step {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  margin: 1.5rem 0;
+}
+.step h2 {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin: 0 0 1.1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.step-num {
+  flex: none;
+  width: 2rem; height: 2rem;
+  display: grid; place-items: center;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 50%;
+  font-size: .95rem;
+  font-weight: 700;
+}
+
+/* --- Controls ----------------------------------------------------------- */
+
+.button {
+  display: inline-block;
+  min-height: 48px;
+  padding: .7rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.button-primary { background: var(--navy); color: #fff; }
+.button-primary:hover { background: var(--navy-deep); }
+.button-primary:disabled { background: #97a3b3; cursor: not-allowed; }
+.button-large { font-size: 1.15rem; padding: .9rem 2rem; width: 100%; max-width: 22rem; }
+.button-quiet {
+  background: var(--surface); color: var(--navy);
+  border-color: var(--rule); margin-top: .75rem;
+}
+
+:focus-visible {
+  outline: 3px solid #0b6bcb;
+  outline-offset: 2px;
+}
+
+/* Visually hidden but focusable, so the label acts as the button. */
+#file-input {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+#file-input:focus-visible + label { outline: 3px solid #0b6bcb; outline-offset: 2px; }
+
+.dropzone {
+  border: 2px dashed var(--rule);
+  border-radius: var(--radius);
+  padding: 2rem 1.25rem;
+  text-align: center;
+  background: #fafbfd;
+}
+.dropzone.is-over { border-color: var(--navy); background: #eaf1fa; }
+
+.help { margin: .55rem 0 0; color: var(--ink-soft); font-size: .93rem; }
+.optional { color: var(--ink-soft); font-weight: 400; font-size: .85rem; }
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--gap);
+}
+.field label { display: block; font-weight: 600; margin-bottom: .35rem; }
+.field input, .field select, textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: .6rem .75rem;
+  border: 1px solid #8d97a5;
+  border-radius: var(--radius);
+  font: inherit;
+  background: #fff;
+  color: var(--ink);
+}
+textarea { font-family: var(--mono); font-size: .88rem; line-height: 1.5; min-height: 0; }
+
+.mode-switch { display: flex; gap: .5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.mode-button {
+  min-height: 48px; padding: .6rem 1.2rem;
+  border: 2px solid var(--rule); background: #fff; color: var(--ink-soft);
+  border-radius: var(--radius); font: inherit; font-weight: 600; cursor: pointer;
+}
+.mode-button.is-active { border-color: var(--navy); background: #eaf1fa; color: var(--navy-deep); }
+
+.filelist { list-style: none; margin: 1rem 0 0; padding: 0; }
+.filelist li {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .6rem .25rem; border-bottom: 1px solid var(--rule);
+  font-size: .95rem;
+}
+.filelist li:last-child { border-bottom: 0; }
+.filelist .thumb {
+  width: 44px; height: 44px; object-fit: cover;
+  border: 1px solid var(--rule); border-radius: 4px; background: #fff;
+}
+.filelist .size { margin-left: auto; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+/* --- Results ------------------------------------------------------------ */
+
+.results { margin-bottom: 3rem; }
+.results h2 { font-size: 1.5rem; margin: 2rem 0 1rem; }
+
+.summary-bar {
+  display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: baseline;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+}
+.summary-bar strong { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.summary-bar .tally { display: flex; align-items: baseline; gap: .45rem; }
+
+.timing { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--ink-soft); font-size: .93rem; }
+.timing.is-slow { color: var(--fail); font-weight: 600; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 6px solid var(--rule);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+.card.match { border-left-color: var(--pass); }
+.card.review { border-left-color: var(--review); }
+.card.mismatch { border-left-color: var(--fail); }
+
+.card-head {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  padding: 1rem 1.25rem; border-bottom: 1px solid var(--rule);
+}
+.card-head .name { font-weight: 700; word-break: break-all; }
+
+/* The stamp is the one loud element on the page. Everything else stays quiet
+   so this is what an agent's eye lands on first. */
+.stamp {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .3rem .8rem;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  font-size: .82rem; font-weight: 700;
+  letter-spacing: .09em; text-transform: uppercase;
+}
+.stamp.match { color: var(--pass); background: var(--pass-bg); }
+.stamp.review { color: var(--review); background: var(--review-bg); }
+.stamp.mismatch { color: var(--fail); background: var(--fail-bg); }
+.stamp .glyph { font-size: 1rem; line-height: 1; }
+
+.checklist { list-style: none; margin: 0; padding: 0; }
+.checklist li { padding: 1rem 1.25rem; border-bottom: 1px solid #e8ecf1; }
+.checklist li:last-child { border-bottom: 0; }
+.check-head { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.check-head .field-name { font-weight: 600; }
+.check-explanation { margin: .5rem 0 0; color: var(--ink-soft); }
+
+.compare { margin: .7rem 0 0; display: grid; gap: .35rem; }
+.compare div { display: grid; grid-template-columns: 6.5rem 1fr; gap: .6rem; align-items: start; }
+.compare dt { color: var(--ink-soft); font-size: .85rem; text-transform: uppercase; letter-spacing: .06em; }
+.compare dd {
+  margin: 0; font-family: var(--mono); font-size: .88rem;
+  background: #f4f6f9; padding: .35rem .5rem; border-radius: 4px; word-break: break-word;
+}
+
+.notice {
+  margin: 0; padding: 1rem 1.25rem;
+  background: var(--review-bg); color: #6b420a;
+  border-top: 1px solid var(--rule);
+}
+.notice.error { background: var(--fail-bg); color: #8a1d17; }
+
+.footer { color: var(--ink-soft); font-size: .9rem; padding-bottom: 2.5rem; }
+
+.spinner {
+  display: inline-block; width: 1.1em; height: 1.1em;
+  margin-right: .6em; vertical-align: -.15em;
+  border: 3px solid rgba(255,255,255,.4); border-top-color: #fff;
+  border-radius: 50%; animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+@media (max-width: 32rem) {
+  .compare div { grid-template-columns: 1fr; gap: .15rem; }
+  .button-large { max-width: none; }
+}

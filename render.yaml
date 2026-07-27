@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ttb-label-verification
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      # Set this in the Render dashboard, not here.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: EXTRACTION_MODEL
+        value: claude-haiku-4-5-20251001

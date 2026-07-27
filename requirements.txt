@@ -1,0 +1,11 @@
+# Minimum versions rather than exact pins. Exact pins break on newer Python
+# releases: pip cannot find a prebuilt package, falls back to compiling from
+# source, and fails without a C toolchain. Floors let pip choose a build that
+# matches whatever Python the reviewer has. Verified against both the floors
+# below and the current releases of every package.
+fastapi>=0.115
+uvicorn[standard]>=0.34
+python-multipart>=0.0.20
+pydantic>=2.10
+pillow>=11.0
+anthropic>=0.40

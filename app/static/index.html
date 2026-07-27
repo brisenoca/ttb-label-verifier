@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Label Verification &mdash; TTB Compliance</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Alcohol and Tobacco Tax and Trade Bureau &middot; Prototype</p>
+    <h1>Label Verification</h1>
+    <p class="lede">Upload label artwork and the application it belongs to. Every required field is checked and the result is shown below.</p>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <section class="step" aria-labelledby="step-1-heading">
+    <h2 id="step-1-heading"><span class="step-num" aria-hidden="true">1</span> Choose label images</h2>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" multiple
+             aria-describedby="dropzone-help">
+      <label class="button button-primary" for="file-input">Choose files</label>
+      <p id="dropzone-help" class="help">or drag images here. You can select several at once.</p>
+    </div>
+
+    <ul class="filelist" id="filelist" aria-live="polite"></ul>
+  </section>
+
+  <section class="step" aria-labelledby="step-2-heading">
+    <h2 id="step-2-heading"><span class="step-num" aria-hidden="true">2</span> Enter the application details</h2>
+
+    <div class="mode-switch" role="group" aria-label="How to enter application details">
+      <button type="button" class="mode-button is-active" id="mode-form" aria-pressed="true">One label</button>
+      <button type="button" class="mode-button" id="mode-batch" aria-pressed="false">Several labels</button>
+    </div>
+
+    <div id="single-panel">
+      <div class="field-grid">
+        <div class="field">
+          <label for="brand_name">Brand name</label>
+          <input type="text" id="brand_name" value="OLD TOM DISTILLERY" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="class_type">Class or type</label>
+          <input type="text" id="class_type" value="Kentucky Straight Bourbon Whiskey" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="alcohol_content">Alcohol content</label>
+          <input type="text" id="alcohol_content" value="45% Alc./Vol. (90 Proof)" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="net_contents">Net contents</label>
+          <input type="text" id="net_contents" value="750 mL" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="beverage_type">Beverage type</label>
+          <select id="beverage_type">
+            <option value="distilled_spirits">Distilled spirits</option>
+            <option value="wine">Wine</option>
+            <option value="malt_beverage">Malt beverage</option>
+          </select>
+          <p class="help">Sets the permitted alcohol content tolerance.</p>
+        </div>
+        <div class="field">
+          <label for="bottler_name">Bottler or producer <span class="optional">optional</span></label>
+          <input type="text" id="bottler_name" value="Old Tom Distillery, Bardstown, KY" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <div id="batch-panel" hidden>
+      <label for="batch-json">Application records</label>
+      <p class="help">One record per label. Each <code>filename</code> must match an uploaded image.</p>
+      <textarea id="batch-json" rows="12" spellcheck="false"></textarea>
+      <button type="button" class="button button-quiet" id="load-samples">Load sample records</button>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="step-3-heading">
+    <h2 id="step-3-heading"><span class="step-num" aria-hidden="true">3</span> Run the check</h2>
+    <button type="button" class="button button-primary button-large" id="verify" disabled>
+      Verify labels
+    </button>
+    <p class="help" id="verify-help">Choose at least one image first.</p>
+  </section>
+
+  <section id="results" class="results" aria-live="polite" aria-labelledby="results-heading" hidden>
+    <h2 id="results-heading">Results</h2>
+    <div id="summary"></div>
+    <div id="cards"></div>
+  </section>
+
+</main>
+
+<footer class="wrap footer">
+  <p>Prototype for evaluation only. Results are not a compliance determination and no data is retained.
+     Extraction engine: <span id="engine">checking&hellip;</span></p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
